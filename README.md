@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 AI CRM Feedback - MERN Authentication System
 
 **Status**: ✅ **COMPLETE & PRODUCTION READY**
@@ -492,3 +493,6 @@ _Next: Read START_HERE.md or QUICK_START.md_
 _Last Updated: November 24, 2025_
 
 _Built with ❤️ for the AI CRM Feedback System_
+=======
+# PS_sample
+>>>>>>> 7d0bd6eb1669cadcf710d6ebd02fd8008d5ebc6c
