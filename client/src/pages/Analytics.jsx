@@ -41,37 +41,39 @@ const CircularProgress = ({
   const offset = circumference - (progress / 100) * circumference;
 
   return (
-    <div className="relative inline-flex flex-col items-center">
-      <svg width={size} height={size} className="transform -rotate-90">
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={darkMode ? "#374151" : "#E5E7EB"}
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={color}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span
-          className={`text-xl font-bold ${
-            darkMode ? "text-white" : "text-gray-800"
-          }`}
-        >
-          {Math.round(progress)}%
-        </span>
+    <div className="flex flex-col items-center">
+      <div className="relative inline-flex" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="transform -rotate-90">
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={darkMode ? "#374151" : "#E5E7EB"}
+            strokeWidth={strokeWidth}
+          />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            className="transition-all duration-1000 ease-out"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            className={`text-xl font-bold ${
+              darkMode ? "text-white" : "text-gray-800"
+            }`}
+          >
+            {Math.round(progress)}%
+          </span>
+        </div>
       </div>
       {label && (
         <span
@@ -160,14 +162,19 @@ const Analytics = () => {
       ]);
 
       if (feedbackRes.data.success) {
+        console.log("Feedback Stats:", feedbackRes.data.stats);
         setStats(feedbackRes.data.stats);
+      } else {
+        console.warn("Feedback API returned non-success:", feedbackRes.data);
       }
+      
       if (adminRes?.data?.success) {
+        console.log("Admin Stats:", adminRes.data.stats);
         setAdminStats(adminRes.data.stats);
       }
     } catch (err) {
       setError("Failed to load analytics data");
-      console.error(err);
+      console.error("Fetch stats error:", err);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -206,45 +213,122 @@ const Analytics = () => {
     );
   }
 
-  // Use breakdown from feedback API or bySentiment from admin API
+  // Use breakdown from feedback API (user's personal data only)
   const getSentimentValue = (sentiment) => {
-    // Try feedback API format first (breakdown.sentiment.count)
+    // Only use feedback API format (breakdown.sentiment.count)
+    // This ensures consistency with Dashboard page
     if (stats?.breakdown?.[sentiment]?.count !== undefined) {
       return stats.breakdown[sentiment].count;
-    }
-    // Try admin API format (bySentiment.sentiment)
-    if (adminStats?.feedback?.bySentiment?.[sentiment] !== undefined) {
-      return adminStats.feedback.bySentiment[sentiment];
     }
     return 0;
   };
 
+  // Debug: Log what we're getting
+  if (stats) {
+    console.log("Current stats data:", {
+      total: stats.total,
+      breakdown: stats.breakdown,
+      hasPositive: !!stats.breakdown?.positive,
+      hasNeutral: !!stats.breakdown?.neutral,
+      hasNegative: !!stats.breakdown?.negative,
+    });
+  }
+
+  // Get sentiment counts
+  const positiveCount = getSentimentValue("positive");
+  const negativeCount = getSentimentValue("negative");
+  const neutralCount = getSentimentValue("neutral");
+  
+  console.log("Sentiment counts:", { positiveCount, negativeCount, neutralCount });
+  
+  // Calculate total from the user's feedback stats only (for consistency)
+  const totalFeedback = stats?.total || 0;
+  
+  // Calculate percentages with .toFixed(1) for consistency with backend
+  const positiveRate =
+    totalFeedback > 0 ? ((positiveCount / totalFeedback) * 100).toFixed(1) : 0;
+  const negativeRate =
+    totalFeedback > 0 ? ((negativeCount / totalFeedback) * 100).toFixed(1) : 0;
+  const neutralRate =
+    totalFeedback > 0 ? ((neutralCount / totalFeedback) * 100).toFixed(1) : 0;
+
+  // Get dynamic growth metrics from backend
+  const totalGrowth = stats?.growth?.total || 0;
+  const positiveGrowth = stats?.breakdown?.positive?.weekGrowth || 0;
+  const negativeGrowth = stats?.breakdown?.negative?.weekGrowth || 0;
+
+  // Get sentiment counts based on selected time range
+  const getTimeFilteredSentimentCounts = () => {
+    // For now, if we don't have time-filtered data from the API,
+    // return the full counts. The API should ideally support time range filtering.
+    // If selectedTimeRange is "all", always show all data
+    if (selectedTimeRange === "all") {
+      return {
+        positive: positiveCount,
+        negative: negativeCount,
+        neutral: neutralCount,
+      };
+    }
+
+    // If API returns time-based breakdown, use it
+    if (stats?.timeRange?.[selectedTimeRange]) {
+      const timeData = stats.timeRange[selectedTimeRange];
+      return {
+        positive: timeData.positive || positiveCount,
+        negative: timeData.negative || negativeCount,
+        neutral: timeData.neutral || neutralCount,
+      };
+    }
+
+    // Fallback: If API doesn't support time filtering yet,
+    // show full data (this should be improved on backend)
+    return {
+      positive: positiveCount,
+      negative: negativeCount,
+      neutral: neutralCount,
+    };
+  };
+
+  const filteredCounts = getTimeFilteredSentimentCounts();
+  const filteredTotal =
+    filteredCounts.positive + filteredCounts.negative + filteredCounts.neutral;
+  const displayTotal = filteredTotal > 0 ? filteredTotal : totalFeedback;
+
   const sentimentData = [
     {
       label: "Positive",
-      value: getSentimentValue("positive"),
+      value: positiveCount,
       color: "bg-green-500",
     },
     {
       label: "Neutral",
-      value: getSentimentValue("neutral"),
+      value: neutralCount,
       color: "bg-gray-500",
     },
     {
       label: "Negative",
-      value: getSentimentValue("negative"),
+      value: negativeCount,
       color: "bg-red-500",
     },
   ];
 
-  // Get total from feedback API or admin API
-  const totalFeedback = stats?.total || adminStats?.feedback?.total || 0;
-  const positiveCount = getSentimentValue("positive");
-  const negativeCount = getSentimentValue("negative");
-  const positiveRate =
-    totalFeedback > 0 ? (positiveCount / totalFeedback) * 100 : 0;
-  const negativeRate =
-    totalFeedback > 0 ? (negativeCount / totalFeedback) * 100 : 0;
+  const filteredSentimentData = [
+    {
+      label: "Positive",
+      value: filteredCounts.positive,
+      color: "bg-green-500",
+    },
+    {
+      label: "Neutral",
+      value: filteredCounts.neutral,
+      color: "bg-gray-500",
+    },
+    {
+      label: "Negative",
+      value: filteredCounts.negative,
+      color: "bg-red-500",
+    },
+  ];
 
   return (
     <div
@@ -317,30 +401,25 @@ const Analytics = () => {
             title="Total Feedback"
             value={totalFeedback}
             icon="📝"
+            trend={`${totalGrowth > 0 ? '+' : ''}${totalGrowth}%`}
+            trendUp={totalGrowth >= 0}
             color="blue"
             darkMode={darkMode}
           />
           <StatCard
             title="Positive"
             value={positiveCount}
-            percentage={positiveRate.toFixed(1)}
+            percentage={positiveRate}
             icon="😊"
             color="green"
-            trend="+12%"
-            trendUp={true}
+            trend={`${positiveGrowth > 0 ? '+' : ''}${positiveGrowth}%`}
+            trendUp={positiveGrowth >= 0}
             darkMode={darkMode}
           />
           <StatCard
             title="Neutral"
-            value={getSentimentValue("neutral")}
-            percentage={
-              totalFeedback > 0
-                ? (
-                    (getSentimentValue("neutral") / totalFeedback) *
-                    100
-                  ).toFixed(1)
-                : 0
-            }
+            value={neutralCount}
+            percentage={neutralRate}
             icon="😐"
             color="gray"
             darkMode={darkMode}
@@ -348,11 +427,11 @@ const Analytics = () => {
           <StatCard
             title="Negative"
             value={negativeCount}
-            percentage={negativeRate.toFixed(1)}
+            percentage={negativeRate}
             icon="😞"
             color="red"
-            trend="-5%"
-            trendUp={false}
+            trend={`${negativeGrowth > 0 ? '+' : ''}${negativeGrowth}%`}
+            trendUp={negativeGrowth <= 0}
             darkMode={darkMode}
           />
         </div>
@@ -397,14 +476,14 @@ const Analytics = () => {
 
             {totalFeedback > 0 ? (
               <>
-                <BarChart data={sentimentData} darkMode={darkMode} />
+                <BarChart data={filteredSentimentData} darkMode={darkMode} />
 
                 {/* Sentiment Progress Bars */}
                 <div className="mt-8 space-y-4">
-                  {sentimentData.map((item) => {
+                  {filteredSentimentData.map((item) => {
                     const percentage =
-                      totalFeedback > 0
-                        ? (item.value / totalFeedback) * 100
+                      displayTotal > 0
+                        ? (item.value / displayTotal) * 100
                         : 0;
                     return (
                       <div key={item.label} className="flex items-center gap-4">
@@ -849,7 +928,10 @@ const StatCard = ({
                 : "bg-white/80 text-gray-600"
             }`}
           >
-            {percentage}%
+            {typeof percentage === "number"
+              ? percentage.toFixed(1)
+              : percentage}
+            %
           </span>
         )}
       </div>

@@ -321,6 +321,11 @@ const Dashboard = () => {
   const neutralCount = getSentimentValue("neutral");
   const negativeCount = getSentimentValue("negative");
 
+  // Get dynamic growth metrics from backend
+  const totalGrowth = feedbackStats?.growth?.total || 0;
+  const positiveGrowth = feedbackStats?.breakdown?.positive?.weekGrowth || 0;
+  const negativeGrowth = feedbackStats?.breakdown?.negative?.weekGrowth || 0;
+
   if (loading) {
     return (
       <div
@@ -504,8 +509,8 @@ const Dashboard = () => {
             title="Total Feedback"
             value={totalFeedback}
             icon="💬"
-            trend="+12% this week"
-            trendUp={true}
+            trend={`${totalGrowth > 0 ? '+' : ''}${totalGrowth}% this week`}
+            trendUp={totalGrowth >= 0}
             color="blue"
             darkMode={darkMode}
             onClick={() => navigate("/feedback")}
@@ -514,8 +519,8 @@ const Dashboard = () => {
             title="Positive"
             value={positiveCount}
             icon="😊"
-            trend="+8% growth"
-            trendUp={true}
+            trend={`${positiveGrowth > 0 ? '+' : ''}${positiveGrowth}%`}
+            trendUp={positiveGrowth >= 0}
             color="green"
             darkMode={darkMode}
             onClick={() => navigate("/analytics")}
@@ -532,8 +537,8 @@ const Dashboard = () => {
             title="Negative"
             value={negativeCount}
             icon="😞"
-            trend="-5% reduced"
-            trendUp={false}
+            trend={`${negativeGrowth > 0 ? '+' : ''}${negativeGrowth}%`}
+            trendUp={negativeGrowth <= 0}
             color="pink"
             darkMode={darkMode}
             onClick={() => navigate("/analytics")}

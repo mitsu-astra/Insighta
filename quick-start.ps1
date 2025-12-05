@@ -4,27 +4,41 @@
 
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "  CRM Sentiment Analysis - Quick Start" -ForegroundColor Cyan
-Write-Host "  (Skipping npm install - use START.bat for" -ForegroundColor DarkGray
-Write-Host "   first run or after package.json changes)" -ForegroundColor DarkGray
+Write-Host "  (Skipping npm install)" -ForegroundColor DarkGray
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Check if Docker is running
-Write-Host "[1/5] Checking Docker..." -ForegroundColor Yellow
+# Check if Docker Desktop is running, if not start it
+Write-Host "[1/6] Checking Docker Desktop..." -ForegroundColor Yellow
+$dockerCheck = $false
 try {
-    $dockerRunning = docker info 2>&1
+    $dockerInfo = docker info 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Host "  Docker is running" -ForegroundColor Green
-    } else {
-        Write-Host "  WARNING: Docker check failed, but continuing..." -ForegroundColor Yellow
+        $dockerCheck = $true
     }
-} catch {
-    Write-Host "  WARNING: Docker check failed, but continuing..." -ForegroundColor Yellow
+}
+catch {
+    $dockerCheck = $false
+}
+
+if ($dockerCheck -eq $false) {
+    Write-Host "  Docker not running, starting Docker Desktop..." -ForegroundColor Yellow
+    try {
+        Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -WindowStyle Hidden
+        Write-Host "  Waiting 15 seconds for Docker to initialize..." -ForegroundColor Yellow
+        Start-Sleep -Seconds 15
+        Write-Host "  Docker Desktop started" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "  Could not start Docker Desktop automatically" -ForegroundColor Yellow
+        Write-Host "  Please start it manually and try again" -ForegroundColor Yellow
+    }
 }
 
 # Start Redis (if not already running)
 Write-Host ""
-Write-Host "[2/5] Starting Redis..." -ForegroundColor Yellow
+Write-Host "[2/6] Starting Redis..." -ForegroundColor Yellow
 try {
     $redisRunning = docker ps --filter "name=redis" --format "{{.Names}}" 2>&1 | Select-String "redis"
     if (-not $redisRunning) {
@@ -34,13 +48,14 @@ try {
         }
     }
     Write-Host "  Redis running on port 6379" -ForegroundColor Green
-} catch {
-    Write-Host "  WARNING: Redis startup skipped" -ForegroundColor Yellow
+}
+catch {
+    Write-Host "  Redis startup skipped" -ForegroundColor Yellow
 }
 
-# Start Prometheus & Grafana (optional)
+# Start Prometheus and Grafana
 Write-Host ""
-Write-Host "[3/5] Starting Prometheus & Grafana..." -ForegroundColor Yellow
+Write-Host "[3/6] Starting Prometheus and Grafana..." -ForegroundColor Yellow
 try {
     Push-Location "$PSScriptRoot\monitoring"
     docker-compose up -d prometheus grafana 2>&1 | Out-Null
@@ -48,19 +63,21 @@ try {
     Write-Host "  Prometheus running on http://localhost:9090" -ForegroundColor Green
     Write-Host "  Grafana running on http://localhost:3001" -ForegroundColor Green
     Write-Host "    Login: team.808.test@gmail.com / team@808" -ForegroundColor DarkGray
-} catch {
-    Write-Host "  WARNING: Docker Compose services skipped" -ForegroundColor Yellow
+}
+catch {
+    Write-Host "  Docker Compose services skipped" -ForegroundColor Yellow
 }
 
 # Start Backend Server
 Write-Host ""
-Write-Host "[4/5] Starting Backend Server..." -ForegroundColor Yellow
+Write-Host "[4/6] Starting Backend Server..." -ForegroundColor Yellow
 try {
     $serverCmd = "cd '$PSScriptRoot\server'; npm start"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $serverCmd
     Write-Host "  Backend starting on http://localhost:4000" -ForegroundColor Green
     Write-Host "  Metrics at http://localhost:4000/metrics" -ForegroundColor DarkGray
-} catch {
+}
+catch {
     Write-Host "  ERROR: Failed to start backend server" -ForegroundColor Red
     Write-Host "  $_" -ForegroundColor Red
 }
@@ -70,12 +87,13 @@ Start-Sleep -Seconds 2
 
 # Start Frontend
 Write-Host ""
-Write-Host "[5/5] Starting Frontend..." -ForegroundColor Yellow
+Write-Host "[5/6] Starting Frontend..." -ForegroundColor Yellow
 try {
     $clientCmd = "cd '$PSScriptRoot\client'; npm run dev"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $clientCmd
     Write-Host "  Frontend starting on http://localhost:3000" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "  ERROR: Failed to start frontend" -ForegroundColor Red
     Write-Host "  $_" -ForegroundColor Red
 }
@@ -97,11 +115,13 @@ Write-Host "  Admin Login:" -ForegroundColor Yellow
 Write-Host "    Email:    team.808.test@gmail.com" -ForegroundColor White
 Write-Host "    Password: team@808" -ForegroundColor White
 Write-Host ""
-Write-Host "  Press Enter to open the app in browser..." -ForegroundColor DarkGray
-Read-Host
 
+# Open browser
+Write-Host "[6/6] Opening in browser..." -ForegroundColor Yellow
 try {
     Start-Process "http://localhost:3000"
-} catch {
+    Write-Host "  Browser opened" -ForegroundColor Green
+}
+catch {
     Write-Host "  Could not open browser automatically" -ForegroundColor Yellow
 }

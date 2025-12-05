@@ -61,11 +61,15 @@ const AdminDashboard = () => {
         }, 3000);
       }
     } catch (err) {
-      setDockerMessage(
-        `❌ Failed to ${action} services: ${
-          err.response?.data?.message || err.message
-        }`
-      );
+      const errorData = err.response?.data;
+      let errorMessage = `❌ ${errorData?.message || `Failed to ${action} services`}`;
+      
+      // Add details if available
+      if (errorData?.details) {
+        errorMessage += `\n${errorData.details}`;
+      }
+      
+      setDockerMessage(errorMessage);
     } finally {
       setDockerLoading(false);
     }
@@ -1424,10 +1428,10 @@ const AdminDashboard = () => {
 
               {dockerMessage && (
                 <div
-                  className={`mb-4 p-3 rounded-lg ${
+                  className={`mb-4 p-4 rounded-lg whitespace-pre-wrap text-sm ${
                     dockerMessage.includes("✅")
-                      ? "bg-green-900/50 border border-green-700"
-                      : "bg-red-900/50 border border-red-700"
+                      ? "bg-green-900/50 border border-green-700 text-green-100"
+                      : "bg-red-900/50 border border-red-700 text-red-100"
                   }`}
                 >
                   {dockerMessage}
