@@ -141,7 +141,6 @@ feedback-pipeline/
 - **React Router**: Client-side routing
 - **Axios**: HTTP client
 - **Chart.js**: Data visualization
-- **Odibee Sans Font**: Custom typography
 
 ### Backend
 - **Node.js**: JavaScript runtime
