@@ -2,14 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
+
 * {
   font-family: "Open Sans", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #E3EEB2 0%, #71C0BB 25%, #4E6688 75%, #332D56 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+body.light-mode {
+  background: linear-gradient(135deg, #E3EEB2 0%, #71C0BB 25%, #4E6688 75%, #332D56 100%);
+}
+
+body.dark-mode {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 25%, #16213e 75%, #0d0d1a 100%);
 }
 
 /* Custom scrollbar */
@@ -18,16 +34,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgba(113, 192, 187, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4c83ee;
+  background: #71C0BB;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3d6acc;
+  background: #4E6688;
 }
 
 /* Smooth transitions */
@@ -40,7 +56,20 @@ select {
 /* Form styles */
 input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(76, 131, 238, 0.1);
+  box-shadow: 0 0 0 3px rgba(113, 192, 187, 0.2);
+  border-color: #71C0BB !important;
+}
+
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(113, 192, 187, 0.2);
+  border-color: #71C0BB !important;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(113, 192, 187, 0.2);
+  border-color: #71C0BB !important;
 }
 
 /* Animation */
@@ -55,6 +84,83 @@ input:focus {
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(113, 192, 187, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(113, 192, 187, 0.8);
+  }
+}
+
 .animate-slide-in {
   animation: slideIn 0.3s ease;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Primary color buttons */
+button {
+  transition: all 0.3s ease;
+}
+
+button:not(.no-theme) {
+  background-color: #332D56;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button:not(.no-theme):hover {
+  background-color: #4E6688;
+  transform: translateY(-2px);
+}
+
+button:not(.no-theme):active {
+  background-color: #71C0BB;
+  transform: translateY(0);
+}
+
+/* Links styling */
+a {
+  color: #4E6688;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #71C0BB;
+  text-decoration: underline;
 }

@@ -218,11 +218,10 @@ const Home = () => {
               className="h-10 transition-transform group-hover:scale-110"
             />
             <span
-              className={`ml-2 text-xl font-bold ${
-                darkMode ? "text-white" : "text-gray-800"
-              } transition-colors`}
+              className="ml-2 text-xl font-bold text-black transition-colors"
+              style={{ fontFamily: "'Odibee Sans', sans-serif" }}
             >
-              AI CRM <span className="text-blue-600">Feedback</span>
+              <span className="text-black">INSIGHTA</span>
             </span>
           </div>
 
@@ -435,44 +434,11 @@ const Home = () => {
             {/* Hero Gauge Animation */}
             <div className="relative">
               <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-8">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Customer Sentiment Analysis</h3>
+                  <p className="text-sm text-gray-500 mt-1">Real-time Feedback Intelligence</p>
+                </div>
                 <AnimatedGauge />
-              </div>
-
-              {/* Floating Cards */}
-              <div className="absolute -left-4 top-1/4 bg-white rounded-xl shadow-xl p-4 animate-float">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-xl">😊</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Sentiment</p>
-                    <p className="font-bold text-green-600">Positive 94%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -right-4 top-1/2 bg-white rounded-xl shadow-xl p-4 animate-float animation-delay-2000">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xl">📈</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Insights</p>
-                    <p className="font-bold text-blue-600">+127 today</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-4 left-1/4 bg-white rounded-xl shadow-xl p-4 animate-float animation-delay-4000">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-xl">🎯</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Accuracy</p>
-                    <p className="font-bold text-purple-600">99.2%</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -707,7 +673,7 @@ const Home = () => {
                 Ready to transform your feedback?
               </h2>
               <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-                Join thousands of companies using AI CRM Feedback to understand
+                Join thousands of companies using INSIGHTA to understand
                 their customers better and drive growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -744,7 +710,7 @@ const Home = () => {
                   alt="Logo"
                   className="h-10 brightness-0 invert"
                 />
-                <span className="ml-2 text-xl font-bold">AI CRM Feedback</span>
+                <span className="ml-2 text-xl font-bold text-black" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>INSIGHTA</span>
               </div>
               <p className="text-gray-400 mb-6">
                 Transform customer feedback into actionable insights with
@@ -773,7 +739,7 @@ const Home = () => {
 
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
             <p>
-              &copy; {new Date().getFullYear()} AI CRM Feedback. All rights
+              &copy; {new Date().getFullYear()} INSIGHTA. All rights
               reserved.
             </p>
           </div>
