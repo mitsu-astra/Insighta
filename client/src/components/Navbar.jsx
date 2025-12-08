@@ -18,15 +18,12 @@ const Navbar = ({ user }) => {
 
   return (
     <nav className={`${darkMode ? "bg-gray-800 shadow-lg" : "bg-white shadow-md"}`}>
-      <div className={`max-w-7xl mx-auto px-6 py-4 flex items-center justify-between ${darkMode ? "text-white" : ""}`}>
+      <div className={`max-w-7xl mx-auto px-6 py-3 flex items-center justify-between ${darkMode ? "text-white" : ""}`}>
         <div
           className="flex items-center cursor-pointer gap-1"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={assets.logo} alt="Logo" className="h-20" />
-          <span className="text-lg font-bold tracking-wide text-black" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>
-            <span className="text-black">INSIGHTA</span>
-          </span>
+          <img src={assets.Main_logo} alt="Logo" className="h-16" />
         </div>
 
         <div className="flex items-center gap-4">

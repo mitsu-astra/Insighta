@@ -433,7 +433,7 @@ const Dashboard = () => {
       <div className={`max-w-7xl mx-auto px-6 py-8`}>
         {/* Hero Welcome Section */}
         <div
-          className={`relative overflow-hidden rounded-2xl p-8 mb-8 ${
+          className={`relative overflow-hidden rounded-2xl p-2 mb-8 ${
             darkMode
               ? "bg-gradient-to-r from-gray-800 via-gray-800 to-gray-700"
               : "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"

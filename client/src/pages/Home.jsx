@@ -205,10 +205,10 @@ const Home = () => {
             : ""
         }`}
         style={{
-          backgroundColor: "#efefef"
+          backgroundColor: "#ffffffff"
         }}
       >
-        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-8">
           <div
             className="flex items-center group cursor-pointer flex-1"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -250,14 +250,14 @@ const Home = () => {
                   : "text-gray-600 hover:text-gray-900"
               } transition font-medium`}
             >
-              Testimonials
+              Feedback
             </a>
           </div>
 
           <div className="flex gap-3">
             <button
               onClick={() => navigate("/login")}
-              className={`font-semibold px-5 py-2.5 rounded-lg transition-all hover:scale-105 ${
+              className={`font-semibold px-3 py-2 rounded-lg transition-all hover:scale-105 ${
                 darkMode
                   ? "text-white hover:bg-gray-800"
                   : "text-gray-700 hover:bg-gray-100"
@@ -267,9 +267,9 @@ const Home = () => {
             </button>
             <button
               onClick={() => navigate("/register")}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2.5 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
             >
-              Get Started Free
+              Sign Up
             </button>
           </div>
         </div>
@@ -321,49 +321,6 @@ const Home = () => {
                 Analyze sentiment, detect intent, and make data-driven decisions
                 that boost satisfaction and drive growth.
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button
-                  onClick={() => navigate("/register")}
-                  className="group bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-4 px-8 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 flex items-center justify-center gap-2"
-                >
-                  Start Free Trial
-                  <svg
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => navigate("/login")}
-                  className={`group font-semibold py-4 px-8 rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 ${
-                    darkMode
-                      ? "bg-gray-800 text-white hover:bg-gray-700"
-                      : "bg-white text-gray-700 hover:bg-gray-50 shadow-lg"
-                  }`}
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Sign In
-                </button>
-              </div>
 
               {/* Trust Badges */}
               <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
