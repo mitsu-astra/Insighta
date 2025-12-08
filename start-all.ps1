@@ -3,11 +3,12 @@
 
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "  CRM Sentiment Analysis - Starting All Services" -ForegroundColor Cyan
+Write-Host "  (with ELK Stack Integration)" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Install dependencies for all modules
-Write-Host "[1/8] Installing Node Dependencies..." -ForegroundColor Yellow
+Write-Host "[1/10] Installing Node Dependencies..." -ForegroundColor Yellow
 
 # Server dependencies
 Write-Host "  Installing server dependencies..." -ForegroundColor Cyan
@@ -42,9 +43,24 @@ if ($LASTEXITCODE -eq 0) {
 }
 Pop-Location
 
+# Create log directories for ELK
+Write-Host ""
+Write-Host "[2/10] Creating log directories..." -ForegroundColor Yellow
+$logDirs = @(
+    "$PSScriptRoot\server\logs",
+    "$PSScriptRoot\feedback-pipeline\logs"
+)
+foreach ($dir in $logDirs) {
+    if (-not (Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+        Write-Host "  Created: $dir" -ForegroundColor Green
+    }
+}
+Write-Host "  Log directories ready" -ForegroundColor Green
+
 # Check if Docker is running
 Write-Host ""
-Write-Host "[2/8] Checking Docker Desktop..." -ForegroundColor Yellow
+Write-Host "[3/10] Checking Docker Desktop..." -ForegroundColor Yellow
 $dockerCheck = $false
 try {
     docker info 2>&1 | Out-Null
@@ -71,9 +87,36 @@ if ($dockerCheck -eq $false) {
     }
 }
 
+# Start ELK Stack (Elasticsearch, Logstash, Kibana)
+Write-Host ""
+Write-Host "[4/10] Starting ELK Stack..." -ForegroundColor Yellow
+try {
+    Push-Location "$PSScriptRoot\monitoring"
+    
+    Write-Host "  Starting Elasticsearch..." -ForegroundColor Cyan
+    docker-compose up -d elasticsearch 2>&1 | Out-Null
+    
+    Write-Host "  Starting Logstash..." -ForegroundColor Cyan
+    docker-compose up -d logstash 2>&1 | Out-Null
+    
+    Write-Host "  Starting Kibana..." -ForegroundColor Cyan
+    docker-compose up -d kibana 2>&1 | Out-Null
+    
+    Write-Host "  Starting Filebeat..." -ForegroundColor Cyan
+    docker-compose up -d filebeat 2>&1 | Out-Null
+# Start Prometheus and Grafana
+Write-Host ""
+Write-Host "[6/10] Starting Prometheus and Grafana..." -ForegroundColor Yellow
+    Write-Host "    Elasticsearch: http://localhost:9200" -ForegroundColor DarkGray
+    Write-Host "    Kibana:        http://localhost:5601" -ForegroundColor DarkGray
+}
+catch {
+    Write-Host "  ELK Stack startup skipped" -ForegroundColor Yellow
+}
+
 # Start Redis (if not already running)
 Write-Host ""
-Write-Host "[3/8] Starting Redis..." -ForegroundColor Yellow
+Write-Host "[5/10] Starting Redis..." -ForegroundColor Yellow
 try {
     $redisRunning = docker ps --filter "name=redis" --format "{{.Names}}" 2>&1 | Select-String "redis"
     if (-not $redisRunning) {
@@ -105,7 +148,7 @@ catch {
 
 # Start Backend Server
 Write-Host ""
-Write-Host "[5/8] Starting Backend Server..." -ForegroundColor Yellow
+Write-Host "[7/10] Starting Backend Server..." -ForegroundColor Yellow
 try {
     $serverCmd = "cd '$PSScriptRoot\server'; npm start"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $serverCmd
@@ -122,7 +165,7 @@ Start-Sleep -Seconds 2
 
 # Start Frontend
 Write-Host ""
-Write-Host "[6/8] Starting Frontend..." -ForegroundColor Yellow
+Write-Host "[8/10] Starting Frontend..." -ForegroundColor Yellow
 try {
     $clientCmd = "cd '$PSScriptRoot\client'; npm run dev"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $clientCmd
@@ -136,26 +179,47 @@ catch {
 # Wait a moment for services to start
 Start-Sleep -Seconds 3
 
+# Check ELK Stack health
 Write-Host ""
-Write-Host "[7/8] Opening browser..." -ForegroundColor Yellow
+Write-Host "[9/10] Checking ELK Stack health..." -ForegroundColor Yellow
+$elkReady = $true
+try {
+    $esResponse = Invoke-WebRequest -Uri "http://localhost:9200/_cluster/health" -UseBasicParsing -TimeoutSec 2 -ErrorAction SilentlyContinue
+    if ($esResponse.StatusCode -eq 200) {
+        Write-Host "  Elasticsearch: Ready" -ForegroundColor Green
+    }
+} catch {
+    Write-Host "  Elasticsearch: Starting... (may take 1-2 minutes)" -ForegroundColor Yellow
+    $elkReady = $false
+}
 
 Write-Host ""
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "  All Services Started!" -ForegroundColor Green
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "Application:" -ForegroundColor Yellow
 Write-Host "  Frontend:    http://localhost:3000" -ForegroundColor White
 Write-Host "  Backend:     http://localhost:4000" -ForegroundColor White
-Write-Host "  Grafana:     http://localhost:3001" -ForegroundColor White
-Write-Host "  Prometheus:  http://localhost:9090" -ForegroundColor White
+Write-Host ""
+Write-Host "Monitoring & Analytics:" -ForegroundColor Yellow
+Write-Host "  Grafana:         http://localhost:3001" -ForegroundColor White
+Write-Host "  Prometheus:      http://localhost:9090" -ForegroundColor White
+Write-Host "  Kibana (ELK):    http://localhost:5601" -ForegroundColor Cyan
+Write-Host "  Elasticsearch:   http://localhost:9200" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Admin Login:" -ForegroundColor Yellow
 Write-Host "    Email:    team.808.test@gmail.com" -ForegroundColor White
 Write-Host "    Password: team@808" -ForegroundColor White
 Write-Host ""
+if (-not $elkReady) {
+    Write-Host "Note: ELK Stack is starting in background. Wait 1-2 minutes before accessing Kibana." -ForegroundColor Yellow
+    Write-Host "      Create index patterns in Kibana: crm-logs-*, crm-errors-*, crm-auth-*" -ForegroundColor Yellow
+    Write-Host ""
+}
 
 # Open browser
-Write-Host "[8/8] Opening in browser..." -ForegroundColor Yellow
+Write-Host "[10/10] Opening in browser..." -ForegroundColor Yellow
 try {
     Start-Process "http://localhost:3000"
     Write-Host "  Browser opened" -ForegroundColor Green

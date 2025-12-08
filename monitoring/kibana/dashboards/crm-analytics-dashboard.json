@@ -1,0 +1,87 @@
+{
+  "title": "CRM Analytics Dashboard",
+  "description": "Real-time analytics for CRM application monitoring",
+  "version": 1,
+  "panels": [
+    {
+      "title": "Total Requests (Last 24h)",
+      "type": "metric",
+      "query": "service:server AND event_type:http"
+    },
+    {
+      "title": "HTTP Status Codes Distribution",
+      "type": "pie",
+      "query": "http_status:*",
+      "field": "http_status"
+    },
+    {
+      "title": "Authentication Events Timeline",
+      "type": "line",
+      "query": "event_type:authentication",
+      "timeField": "@timestamp"
+    },
+    {
+      "title": "Error Rate Over Time",
+      "type": "line",
+      "query": "log_level:error OR log_level:fatal",
+      "timeField": "@timestamp"
+    },
+    {
+      "title": "Feedback Sentiment Distribution",
+      "type": "pie",
+      "query": "sentiment_label:*",
+      "field": "sentiment_label"
+    },
+    {
+      "title": "Top User Activities",
+      "type": "bar",
+      "query": "user_id:* AND NOT user_id:anonymous",
+      "field": "user_id"
+    },
+    {
+      "title": "API Response Times",
+      "type": "histogram",
+      "query": "duration_ms:*",
+      "field": "duration_ms"
+    },
+    {
+      "title": "Recent Errors",
+      "type": "table",
+      "query": "log_level:error",
+      "columns": ["@timestamp", "service", "log_message", "error.message"]
+    },
+    {
+      "title": "User Registration Trends",
+      "type": "line",
+      "query": "event_name:register",
+      "timeField": "@timestamp"
+    },
+    {
+      "title": "Feedback Processing Rate",
+      "type": "metric",
+      "query": "service:worker AND event_type:feedback"
+    }
+  ],
+  "filters": [
+    {
+      "name": "Environment",
+      "field": "environment",
+      "type": "select"
+    },
+    {
+      "name": "Service",
+      "field": "service",
+      "type": "select"
+    },
+    {
+      "name": "Log Level",
+      "field": "log_level",
+      "type": "select"
+    }
+  ],
+  "timeRange": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "refreshInterval": "10s"
+}

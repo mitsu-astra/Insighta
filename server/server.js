@@ -11,6 +11,7 @@ import userRouter from "./routes/userRoutes.js";
 import feedbackRouter from "./routes/feedbackRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import { metricsMiddleware, getMetrics } from "./config/metrics.js";
+import logger, { requestLogger, logInfo, logError } from "./config/logger.js";
 import userModel from "./models/userModel.js";
 import { MongoClient } from "mongodb";
 
@@ -56,6 +57,9 @@ app.use(
   })
 );
 app.use(cookieParser());
+
+// Request logging middleware (ELK integration)
+app.use(requestLogger);
 
 // Prometheus metrics middleware
 app.use(metricsMiddleware);
@@ -132,6 +136,10 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server run successfully!! Port Number ${port}`);
+  logInfo("Server started successfully", {
+    port,
+    environment: process.env.NODE_ENV,
+  });
   console.log(
     `Prometheus metrics available at http://localhost:${port}/metrics`
   );

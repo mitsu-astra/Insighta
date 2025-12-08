@@ -1,0 +1,72 @@
+filebeat.inputs:
+  # Server logs
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/server/*.log
+      - /var/log/server/*.json
+    fields:
+      service: server
+      environment: ${ENVIRONMENT:development}
+    fields_under_root: true
+    json.keys_under_root: true
+    json.add_error_key: true
+
+  # Feedback Pipeline logs
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/feedback-pipeline/*.log
+      - /var/log/feedback-pipeline/*.json
+    fields:
+      service: feedback-pipeline
+      environment: ${ENVIRONMENT:development}
+    fields_under_root: true
+    json.keys_under_root: true
+    json.add_error_key: true
+
+  # Docker container logs
+  - type: container
+    enabled: true
+    paths:
+      - "/var/lib/docker/containers/*/*.log"
+    processors:
+      - add_docker_metadata:
+          host: "unix:///var/run/docker.sock"
+
+# Output to Logstash
+output.logstash:
+  hosts: ["logstash:5000"]
+  compression_level: 3
+
+# Optional: Direct output to Elasticsearch (comment out if using Logstash)
+# output.elasticsearch:
+#   hosts: ["elasticsearch:9200"]
+#   indices:
+#     - index: "crm-server-%{+yyyy.MM.dd}"
+#       when.equals:
+#         service: "server"
+#     - index: "crm-feedback-%{+yyyy.MM.dd}"
+#       when.equals:
+#         service: "feedback-pipeline"
+
+# Logging configuration
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+
+# Performance tuning
+filebeat.registry.path: /usr/share/filebeat/data/registry
+filebeat.config.modules.path: /usr/share/filebeat/modules.d/*.yml
+
+# Processors for enrichment
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

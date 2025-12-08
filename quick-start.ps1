@@ -4,12 +4,26 @@
 
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "  CRM Sentiment Analysis - Quick Start" -ForegroundColor Cyan
-Write-Host "  (Skipping npm install)" -ForegroundColor DarkGray
+Write-Host "  (with ELK Stack - Skipping npm install)" -ForegroundColor DarkGray
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Create log directories for ELK
+Write-Host "[1/8] Creating log directories..." -ForegroundColor Yellow
+$logDirs = @(
+    "$PSScriptRoot\server\logs",
+    "$PSScriptRoot\feedback-pipeline\logs"
+)
+foreach ($dir in $logDirs) {
+    if (-not (Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    }
+}
+Write-Host "  Log directories ready" -ForegroundColor Green
+
 # Check if Docker Desktop is running, if not start it
-Write-Host "[1/6] Checking Docker Desktop..." -ForegroundColor Yellow
+Write-Host ""
+Write-Host "[2/8] Checking Docker Desktop..." -ForegroundColor Yellow
 $dockerCheck = $false
 try {
     docker info 2>&1 | Out-Null
@@ -36,9 +50,34 @@ if ($dockerCheck -eq $false) {
     }
 }
 
+# Start ELK Stack (Elasticsearch, Logstash, Kibana)
+Write-Host ""
+Write-Host "[3/8] Starting ELK Stack..." -ForegroundColor Yellow
+try {
+    Push-Location "$PSScriptRoot\monitoring"
+    
+    Write-Host "  Starting Elasticsearch..." -ForegroundColor Cyan
+    docker-compose up -d elasticsearch 2>&1 | Out-Null
+    
+    Write-Host "  Starting Logstash..." -ForegroundColor Cyan
+    docker-compose up -d logstash 2>&1 | Out-Null
+    
+    Write-Host "  Starting Kibana..." -ForegroundColor Cyan
+    docker-compose up -d kibana 2>&1 | Out-Null
+    
+    Write-Host "  Starting Filebeat..." -ForegroundColor Cyan
+    docker-compose up -d filebeat 2>&1 | Out-Null
+# Start Prometheus and Grafana
+Write-Host ""
+Write-Host "[5/8] Starting Prometheus and Grafana..." -ForegroundColor Yellow
+}
+catch {
+    Write-Host "  ELK Stack startup skipped" -ForegroundColor Yellow
+}
+
 # Start Redis (if not already running)
 Write-Host ""
-Write-Host "[2/6] Starting Redis..." -ForegroundColor Yellow
+Write-Host "[4/8] Starting Redis..." -ForegroundColor Yellow
 try {
     $redisRunning = docker ps --filter "name=redis" --format "{{.Names}}" 2>&1 | Select-String "redis"
     if (-not $redisRunning) {
@@ -70,7 +109,7 @@ catch {
 
 # Start Backend Server
 Write-Host ""
-Write-Host "[4/6] Starting Backend Server..." -ForegroundColor Yellow
+Write-Host "[6/8] Starting Backend Server..." -ForegroundColor Yellow
 try {
     $serverCmd = "cd '$PSScriptRoot\server'; npm start"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $serverCmd
@@ -87,7 +126,7 @@ Start-Sleep -Seconds 2
 
 # Start Frontend
 Write-Host ""
-Write-Host "[5/6] Starting Frontend..." -ForegroundColor Yellow
+Write-Host "[7/8] Starting Frontend..." -ForegroundColor Yellow
 try {
     $clientCmd = "cd '$PSScriptRoot\client'; npm run dev"
     Start-Process powershell -ArgumentList "-NoExit", "-Command", $clientCmd
@@ -106,18 +145,25 @@ Write-Host "================================================" -ForegroundColor C
 Write-Host "  All Services Started!" -ForegroundColor Green
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "Application:" -ForegroundColor Yellow
 Write-Host "  Frontend:    http://localhost:3000" -ForegroundColor White
 Write-Host "  Backend:     http://localhost:4000" -ForegroundColor White
-Write-Host "  Grafana:     http://localhost:3001" -ForegroundColor White
-Write-Host "  Prometheus:  http://localhost:9090" -ForegroundColor White
+Write-Host ""
+Write-Host "Monitoring & Analytics:" -ForegroundColor Yellow
+Write-Host "  Grafana:         http://localhost:3001" -ForegroundColor White
+Write-Host "  Prometheus:      http://localhost:9090" -ForegroundColor White
+Write-Host "  Kibana (ELK):    http://localhost:5601" -ForegroundColor Cyan
+Write-Host "  Elasticsearch:   http://localhost:9200" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Admin Login:" -ForegroundColor Yellow
 Write-Host "    Email:    team.808.test@gmail.com" -ForegroundColor White
 Write-Host "    Password: team@808" -ForegroundColor White
 Write-Host ""
+Write-Host "Note: ELK Stack may take 1-2 minutes to be fully ready" -ForegroundColor Yellow
+Write-Host ""
 
 # Open browser
-Write-Host "[6/6] Opening in browser..." -ForegroundColor Yellow
+Write-Host "[8/8] Opening in browser..." -ForegroundColor Yellow
 try {
     Start-Process "http://localhost:3000"
     Write-Host "  Browser opened" -ForegroundColor Green
