@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
 
 * {
   font-family: "Open Sans", sans-serif;
@@ -163,4 +163,11 @@ a {
 a:hover {
   color: #71C0BB;
   text-decoration: underline;
+}
+
+/* Logo sizing */
+img[alt="Logo"],
+img[alt="Insighta Logo"] {
+  height: 150px !important;
+  width: auto !important;
 }

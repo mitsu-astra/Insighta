@@ -291,15 +291,9 @@ const Login = () => {
         >
           {/* Logo */}
           <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl blur-lg opacity-50 animate-pulse"></div>
-              <div
-                className={`relative p-4 ${
-                  darkMode ? "bg-slate-900" : "bg-cyan-50"
-                } rounded-2xl shadow-lg`}
-              >
-                <span className="text-2xl font-bold text-black" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>INSIGHTA</span>
-              </div>
+            <div className="flex flex-col items-center">
+              <img src={assets.logo} alt="Insighta Logo" style={{ maxHeight: '180px', width: 'auto', marginBottom: '8px' }} />
+              <h1 className="text-2xl font-bold text-black">Insighta</h1>
             </div>
           </div>
 

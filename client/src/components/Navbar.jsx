@@ -23,7 +23,7 @@ const Navbar = ({ user }) => {
           className="flex items-center cursor-pointer gap-1"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={assets.logo} alt="Logo" className="h-10" />
+          <img src={assets.logo} alt="Logo" className="h-20" />
           <span className="text-lg font-bold tracking-wide text-black" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>
             <span className="text-black">INSIGHTA</span>
           </span>
