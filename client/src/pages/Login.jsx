@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { assets } from "../assets";
+import showSvg from "../assets/show.svg";
+import hideSvg from "../assets/hide.svg";
 
 // Floating Particle Component
 const FloatingParticle = ({ delay, duration, size, left, top }) => (
@@ -290,10 +292,9 @@ const Login = () => {
           }`}
         >
           {/* Logo */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-6 rounded-2xl p-4" style={{ backgroundColor: '#ffffffff' }}>
             <div className="flex flex-col items-center">
-              <img src={assets.logo} alt="Insighta Logo" style={{ maxHeight: '180px', width: 'auto', marginBottom: '8px' }} />
-              <h1 className="text-2xl font-bold text-black">Insighta</h1>
+              <img src={assets.Main_logo} alt="Insighta Logo" className="h-16 w-auto transition-transform group-hover:scale-110" />
             </div>
           </div>
 
@@ -304,7 +305,7 @@ const Login = () => {
                 darkMode ? "text-white" : "text-gray-800"
               }`}
             >
-              Welcome Back! 👋
+                  Welcome Back! 👋
             </h2>
             <p className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               Sign in to continue your journey
@@ -426,11 +427,18 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className={`text-xl transition-transform hover:scale-110 ${
-                      darkMode ? "text-gray-400" : "text-gray-500"
-                    }`}
+                    className={`transition-transform hover:scale-110`}
                   >
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                    <img
+                      src={showPassword ? showSvg:hideSvg}
+                      alt={showPassword ? "Hide password" : "Show password"}
+                      style={{ 
+                        width: '20px', 
+                        height: '20px',
+                        filter: 'brightness(0) saturate(100%) invert(1)',
+                        backgroundColor: 'transparent'
+                      }}
+                    />
                   </button>
                 </div>
               </div>
