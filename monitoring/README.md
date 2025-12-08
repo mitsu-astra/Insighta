@@ -20,9 +20,9 @@ docker-compose up -d
 
 | Service    | URL                   | Credentials                    |
 | ---------- | --------------------- | ------------------------------ |
-| Grafana    | http://localhost:3001 | team.808.test@gmail.com / team@808 |
-| Prometheus | http://localhost:9090 | -                              |
-| Redis      | localhost:6379        | -                              |
+| Grafana    | http://172.24.48.1:3001 | team.808.test@gmail.com / team@808 |
+| Prometheus | http://172.24.48.1:9090 | -                              |
+| Redis      | 172.24.48.1:6379        | -                              |
 
 ## Services
 
@@ -68,7 +68,7 @@ The "CRM Sentiment Analysis - Live Metrics" dashboard is automatically created o
 
 If you want to create a custom dashboard:
 
-1. Login to Grafana at http://localhost:3001
+1. Login to Grafana at http://172.24.48.1:3001
 2. Go to Dashboards → New → New Dashboard
 3. Add a panel and select Prometheus as data source
 4. Use queries like:
@@ -113,13 +113,13 @@ docker-compose down -v
 ### Backend not showing in Prometheus
 
 1. Ensure backend is running: `npm run dev` in server folder
-2. Check metrics endpoint: http://localhost:4000/metrics
+2. Check metrics endpoint: http://172.24.48.1:4000/metrics
 3. On Windows, `host.docker.internal` should resolve to host machine
 
 ### Grafana can't connect to Prometheus
 
 1. Both containers must be on the same Docker network
-2. Check if Prometheus is running: http://localhost:9090
+2. Check if Prometheus is running: http://172.24.48.1:9090
 3. Verify datasource configuration in Grafana
 
 ## Environment Variables

@@ -8,7 +8,7 @@ Write-Host ""
 # Check Backend
 Write-Host "[1] Checking Backend Server (port 4000)..." -ForegroundColor Yellow
 try {
-    $null = Invoke-WebRequest -Uri "http://localhost:4000" -TimeoutSec 2 -ErrorAction SilentlyContinue
+    $null = Invoke-WebRequest -Uri "http://172.24.48.1:4000" -TimeoutSec 2 -ErrorAction SilentlyContinue
     Write-Host "  BACKEND OK - Server is responding" -ForegroundColor Green
 }
 catch {
@@ -20,7 +20,7 @@ catch {
 Write-Host ""
 Write-Host "[2] Checking Frontend Server (port 3000)..." -ForegroundColor Yellow
 try {
-    $null = Invoke-WebRequest -Uri "http://localhost:3000" -TimeoutSec 2 -ErrorAction SilentlyContinue
+    $null = Invoke-WebRequest -Uri "http://172.24.48.1:3000" -TimeoutSec 2 -ErrorAction SilentlyContinue
     Write-Host "  FRONTEND OK - Server is responding" -ForegroundColor Green
 }
 catch {
@@ -39,7 +39,7 @@ if (Test-Path "c:\PS_sample\.env") {
     if ($content -match "PORT=4000") {
         Write-Host "  PORT is set to 4000" -ForegroundColor Green
     }
-    if ($content -match "CLIENT_URL=http://localhost:3000") {
+    if ($content -match "CLIENT_URL=http://172.24.48.1:3000") {
         Write-Host "  CLIENT_URL is set correctly" -ForegroundColor Green
     }
 }

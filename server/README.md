@@ -16,7 +16,7 @@ Create a `.env` file in the root directory with the following variables:
 - `SMTP_USER` - SMTP username (Brevo)
 - `SMTP_PASS` - SMTP password (Brevo)
 - `SENDER_EMAIL` - Email address to send from
-- `CLIENT_URL` - Client URL for CORS (default: `http://localhost:3000`)
+- `CLIENT_URL` - Client URL for CORS (default: `http://172.24.48.1:3000`)
 
 ## Development
 
