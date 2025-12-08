@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { assets } from "../assets";
+import showSvg from "../assets/show.svg";
+import hideSvg from "../assets/hide.svg";
 
 // Floating Particle Component
 const FloatingParticle = ({ delay, duration, size, left, top }) => (
@@ -26,12 +28,12 @@ const AnimatedBackground = ({ darkMode }) => (
     {/* Gradient Orbs */}
     <div
       className={`absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl opacity-30 animate-pulse ${
-        darkMode ? "bg-blue-600" : "bg-blue-400"
+        darkMode ? "bg-teal-600" : "bg-teal-400"
       }`}
     />
     <div
       className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl opacity-30 animate-pulse ${
-        darkMode ? "bg-purple-600" : "bg-purple-400"
+        darkMode ? "bg-cyan-600" : "bg-cyan-400"
       }`}
       style={{ animationDelay: "1s" }}
     />
@@ -151,8 +153,8 @@ const Login = () => {
     <div
       className={`min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-8 ${
         darkMode
-          ? "bg-gray-900"
-          : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
+          ? "bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900"
+          : "bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50"
       }`}
     >
       {/* Add custom styles for animations */}
@@ -284,22 +286,15 @@ const Login = () => {
         {/* Right Side - Login Form */}
         <div
           className={`w-full max-w-md mx-auto ${
-            darkMode ? "bg-gray-800/80" : "bg-white/80"
+            darkMode ? "bg-gradient-to-br from-slate-800 to-slate-900/80" : "bg-gradient-to-br from-slate-50 to-cyan-50/80"
           } backdrop-blur-xl rounded-3xl shadow-2xl p-8 border ${
-            darkMode ? "border-gray-700" : "border-white/50"
+            darkMode ? "border-teal-600/30" : "border-teal-200/50"
           }`}
         >
           {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-lg opacity-50 animate-pulse"></div>
-              <div
-                className={`relative p-4 ${
-                  darkMode ? "bg-gray-900" : "bg-white"
-                } rounded-2xl shadow-lg`}
-              >
-                <img src={assets.logo} alt="Logo" className="h-10" />
-              </div>
+          <div className="flex justify-center mb-6 rounded-2xl p-4" style={{ backgroundColor: '#ffffffff' }}>
+            <div className="flex flex-col items-center">
+              <img src={assets.Main_logo} alt="Insighta Logo" className="h-16 w-auto transition-transform group-hover:scale-110" />
             </div>
           </div>
 
@@ -310,7 +305,7 @@ const Login = () => {
                 darkMode ? "text-white" : "text-gray-800"
               }`}
             >
-              Welcome Back! 👋
+                  Welcome Back! 👋
             </h2>
             <p className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               Sign in to continue your journey
@@ -348,13 +343,13 @@ const Login = () => {
                 <div
                   className={`relative flex items-center border-2 rounded-xl px-4 py-3 transition-all duration-300 ${
                     darkMode
-                      ? "bg-gray-900 border-gray-700"
-                      : "bg-white border-gray-200"
+                      ? "bg-slate-900 border-teal-600/50"
+                      : "bg-white/50 border-teal-200"
                   } ${
                     focusedField === "email"
                       ? darkMode
-                        ? "border-blue-500"
-                        : "border-blue-400"
+                        ? "border-teal-500"
+                        : "border-teal-400"
                       : ""
                   }`}
                 >
@@ -403,13 +398,13 @@ const Login = () => {
                 <div
                   className={`relative flex items-center border-2 rounded-xl px-4 py-3 transition-all duration-300 ${
                     darkMode
-                      ? "bg-gray-900 border-gray-700"
-                      : "bg-white border-gray-200"
+                      ? "bg-slate-900 border-teal-600/50"
+                      : "bg-white/50 border-teal-200"
                   } ${
                     focusedField === "password"
                       ? darkMode
-                        ? "border-blue-500"
-                        : "border-blue-400"
+                        ? "border-teal-500"
+                        : "border-teal-400"
                       : ""
                   }`}
                 >
@@ -432,11 +427,18 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className={`text-xl transition-transform hover:scale-110 ${
-                      darkMode ? "text-gray-400" : "text-gray-500"
-                    }`}
+                    className={`transition-transform hover:scale-110`}
                   >
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                    <img
+                      src={showPassword ? showSvg:hideSvg}
+                      alt={showPassword ? "Hide password" : "Show password"}
+                      style={{ 
+                        width: '20px', 
+                        height: '20px',
+                        filter: 'brightness(0) saturate(100%) invert(1)',
+                        backgroundColor: 'transparent'
+                      }}
+                    />
                   </button>
                 </div>
               </div>
@@ -463,12 +465,12 @@ const Login = () => {
               disabled={loading}
               className="relative w-full group overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-size-200 animate-gradient-x rounded-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-600 bg-size-200 animate-gradient-x rounded-xl"></div>
               <div
                 className={`relative flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${
                   loading
                     ? "opacity-70"
-                    : "hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5"
+                    : "hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5"
                 }`}
               >
                 {loading ? (
@@ -518,7 +520,7 @@ const Login = () => {
             Don't have an account?{" "}
             <button
               onClick={() => navigate("/register")}
-              className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-500 hover:to-purple-500 transition-all"
+              className="font-semibold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent hover:from-teal-500 hover:to-cyan-500 transition-all"
             >
               Create Account ✨
             </button>

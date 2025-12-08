@@ -96,7 +96,7 @@ cp .env.example .env
 Edit `.env` and update if needed:
 
 ```
-VITE_API_URL=http://localhost:4000
+VITE_API_URL=http://172.24.48.1:4000
 VITE_APP_NAME=AI CRM Feedback
 ```
 
@@ -108,7 +108,7 @@ VITE_APP_NAME=AI CRM Feedback
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://172.24.48.1:3000`
 
 ### Build for production
 
@@ -239,7 +239,7 @@ Each authentication handler has a dedicated component:
 
 ### Development
 
-- API URL: `http://localhost:4000`
+- API URL: `http://172.24.48.1:4000`
 - Port: `3000`
 - Proxy: Configured for API calls
 

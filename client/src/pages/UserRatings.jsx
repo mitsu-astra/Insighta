@@ -65,9 +65,9 @@ const UserRatings = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500"></div>
           <p className="mt-4 text-gray-300">Loading User Ratings...</p>
         </div>
       </div>
@@ -75,9 +75,9 @@ const UserRatings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white">
       {/* Header */}
-      <nav className="bg-gray-800 border-b border-gray-700">
+      <nav className="bg-gradient-to-r from-slate-800 to-slate-700 border-b border-teal-600">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <span className="text-2xl font-bold text-yellow-400">

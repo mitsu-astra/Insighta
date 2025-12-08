@@ -424,8 +424,8 @@ const Dashboard = () => {
     <div
       className={`min-h-screen ${
         darkMode
-          ? "dark bg-gray-900"
-          : "bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+          ? "dark bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900"
+          : "bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50"
       }`}
     >
       <Navbar user={user} />

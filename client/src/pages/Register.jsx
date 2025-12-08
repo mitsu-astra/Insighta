@@ -246,8 +246,8 @@ const Register = () => {
     <div
       className={`min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-8 ${
         darkMode
-          ? "bg-gray-900"
-          : "bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50"
+          ? "bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900"
+          : "bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50"
       }`}
     >
       {/* Add custom styles for animations */}
@@ -386,7 +386,7 @@ const Register = () => {
                   darkMode ? "bg-gray-900" : "bg-white"
                 } rounded-2xl shadow-lg`}
               >
-                <img src={assets.logo} alt="Logo" className="h-10" />
+                <span className="text-2xl font-bold text-black" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>INSIGHTA</span>
               </div>
             </div>
           </div>

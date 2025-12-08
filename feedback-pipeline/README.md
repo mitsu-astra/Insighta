@@ -59,30 +59,30 @@ npm run dev
 
 ```bash
 # Submit feedback
-curl -X POST http://localhost:3005/feedback \
+curl -X POST http://172.24.48.1:3005/feedback \
   -H "Content-Type: application/json" \
   -d '{"userId": "user123", "text": "I love this product! Great support team."}'
 
 # Response: {"jobId": "uuid...", "status": "queued"}
 
 # Check job status
-curl http://localhost:3005/feedback/{jobId}
+curl http://172.24.48.1:3005/feedback/{jobId}
 
 # Health check
-curl http://localhost:3005/health
+curl http://172.24.48.1:3005/health
 
 # Prometheus metrics
-curl http://localhost:3005/metrics   # API metrics
-curl http://localhost:3006/metrics   # Worker metrics
+curl http://172.24.48.1:3005/metrics   # API metrics
+curl http://172.24.48.1:3006/metrics   # Worker metrics
 ```
 
 ## Configuration (.env)
 
 | Variable             | Default                   | Description                |
 | -------------------- | ------------------------- | -------------------------- |
-| `REDIS_HOST`         | localhost                 | Redis host                 |
+| `REDIS_HOST`         | 172.24.48.1                 | Redis host                 |
 | `REDIS_PORT`         | 6379                      | Redis port                 |
-| `MONGO_URI`          | mongodb://localhost:27017 | MongoDB connection         |
+| `MONGO_URI`          | mongodb://172.24.48.1:27017 | MongoDB connection         |
 | `MONGO_DB`           | feedback_pipeline         | Database name              |
 | `AI_API_URL`         | -                         | Hugging Face inference URL |
 | `AI_API_KEY`         | -                         | HF API key                 |

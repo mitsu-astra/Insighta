@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { assets } from "../assets";
 import { publicAPI } from "../services/api";
+import AnimatedGauge from "../components/AnimatedGauge";
 
 // Static data - defined outside component to avoid recreation
 const testimonials = [
@@ -200,29 +201,23 @@ const Home = () => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? `${
-                darkMode ? "bg-gray-900/95" : "bg-white/95"
-              } backdrop-blur-md shadow-lg`
-            : "bg-transparent"
+            ? "backdrop-blur-md shadow-lg"
+            : ""
         }`}
+        style={{
+          backgroundColor: "#efefef"
+        }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between gap-8">
           <div
-            className="flex items-center group cursor-pointer"
+            className="flex items-center group cursor-pointer flex-1"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <img
-              src={assets.logo}
-              alt="Logo"
-              className="h-10 transition-transform group-hover:scale-110"
+              src={assets.Main_logo}
+              alt="Insighta"
+              className="h-16 w-auto transition-transform group-hover:scale-110"
             />
-            <span
-              className={`ml-2 text-xl font-bold ${
-                darkMode ? "text-white" : "text-gray-800"
-              } transition-colors`}
-            >
-              AI CRM <span className="text-blue-600">Feedback</span>
-            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -377,7 +372,7 @@ const Home = () => {
                     darkMode ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
-                  <svg
+                  {/* <svg
                     className="w-5 h-5 text-green-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -387,9 +382,9 @@ const Home = () => {
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
-                  </svg>
+                  </svg> */}
                   <span className="text-sm font-medium">
-                    No credit card required
+                    {/* No credit card required */}
                   </span>
                 </div>
                 <div
@@ -397,7 +392,7 @@ const Home = () => {
                     darkMode ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
-                  <svg
+                  {/* <svg
                     className="w-5 h-5 text-green-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -407,15 +402,15 @@ const Home = () => {
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
-                  </svg>
-                  <span className="text-sm font-medium">14-day free trial</span>
+                  </svg> */}
+                  <span className="text-sm font-medium"></span>
                 </div>
                 <div
                   className={`flex items-center gap-2 ${
                     darkMode ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
-                  <svg
+                  {/* <svg
                     className="w-5 h-5 text-green-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -425,57 +420,20 @@ const Home = () => {
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
-                  </svg>
-                  <span className="text-sm font-medium">Cancel anytime</span>
+                  </svg> */}
+                  <span className="text-sm font-medium"></span>
                 </div>
               </div>
             </div>
 
-            {/* Hero Image/Animation */}
+            {/* Hero Gauge Animation */}
             <div className="relative">
-              <div className="relative z-10">
-                <img
-                  src={assets.header_img}
-                  alt="AI Feedback Analysis Dashboard"
-                  className="w-full h-auto rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
-                />
-
-                {/* Floating Cards */}
-                <div className="absolute -left-4 top-1/4 bg-white rounded-xl shadow-xl p-4 animate-float">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-xl">😊</span>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Sentiment</p>
-                      <p className="font-bold text-green-600">Positive 94%</p>
-                    </div>
-                  </div>
+              <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-8">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Customer Sentiment Analysis</h3>
+                  <p className="text-sm text-gray-500 mt-1">Real-time Feedback Intelligence</p>
                 </div>
-
-                <div className="absolute -right-4 top-1/2 bg-white rounded-xl shadow-xl p-4 animate-float animation-delay-2000">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-xl">📈</span>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Insights</p>
-                      <p className="font-bold text-blue-600">+127 today</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-4 left-1/4 bg-white rounded-xl shadow-xl p-4 animate-float animation-delay-4000">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-xl">🎯</span>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Accuracy</p>
-                      <p className="font-bold text-purple-600">99.2%</p>
-                    </div>
-                  </div>
-                </div>
+                <AnimatedGauge />
               </div>
             </div>
           </div>
@@ -510,6 +468,19 @@ const Home = () => {
               icon="🛡️"
               darkMode={darkMode}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Insighta Logo Banner Section */}
+      <section className={`py-20 ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+        <div className="max-w-7xl mx-auto px-6 flex justify-center">
+          <div className="w-full max-w-sm flex flex-col items-center">
+            <div className="text-center mb-4">
+              <div className={`mb-2 flex justify-center`}>
+                <img src={assets.Main_logo} alt="Insighta Logo" style={{ maxHeight: '500px', width: 'auto' }} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -608,17 +579,16 @@ const Home = () => {
           darkMode ? "bg-gray-900" : "bg-gradient-to-b from-blue-50 to-white"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-9xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
-              TESTIMONIALS
+              FEEDBACK FROM OUR CUSTOMERS
             </span>
             <h2
               className={`text-4xl md:text-5xl font-bold mb-6 ${
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
-              Loved by businesses worldwide
             </h2>
           </div>
 
@@ -710,7 +680,7 @@ const Home = () => {
                 Ready to transform your feedback?
               </h2>
               <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-                Join thousands of companies using AI CRM Feedback to understand
+                Join thousands of companies using INSIGHTA to understand
                 their customers better and drive growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -742,12 +712,23 @@ const Home = () => {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center mb-6">
-                <img
-                  src={assets.logo}
-                  alt="Logo"
-                  className="h-10 brightness-0 invert"
-                />
-                <span className="ml-2 text-xl font-bold">AI CRM Feedback</span>
+                <svg width="40" height="40" viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: "#fff", stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: "#ccc", stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  <g transform="translate(100, 100)">
+                    <path d="M 0,-30 Q 20,-20 20,0 Q 20,20 0,30 Q -20,20 -20,0 Q -20,-20 0,-30" 
+                      fill="none" stroke="url(#grad2)" strokeWidth="4" opacity="0.9"/>
+                    <path d="M 20,0 Q 30,-20 40,-10 Q 40,20 20,30 Q 10,20 10,0 Q 10,-10 20,0" 
+                      fill="none" stroke="url(#grad2)" strokeWidth="4" opacity="0.8"/>
+                    <path d="M -20,0 Q -30,-20 -40,-10 Q -40,20 -20,30 Q -10,20 -10,0 Q -10,-10 -20,0" 
+                      fill="none" stroke="url(#grad2)" strokeWidth="4" opacity="0.7"/>
+                  </g>
+                </svg>
+                <span className="ml-2 text-xl font-bold text-white" style={{ fontFamily: "'Odibee Sans', sans-serif" }}>INSIGHTA</span>
               </div>
               <p className="text-gray-400 mb-6">
                 Transform customer feedback into actionable insights with
@@ -776,7 +757,7 @@ const Home = () => {
 
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
             <p>
-              &copy; {new Date().getFullYear()} AI CRM Feedback. All rights
+              &copy; {new Date().getFullYear()} INSIGHTA. All rights
               reserved.
             </p>
           </div>

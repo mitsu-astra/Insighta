@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <nav style={navStyle}>
       <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-        <img src={assets.logo} alt="Logo" style={{ height: '30px', marginRight: '10px' }} />
+        <img src={assets.logo} alt="Logo" style={{ height: '60px', marginRight: '10px' }} />
         <span style={{ fontSize: '1.5em', fontWeight: 'bold', color: '#333' }}>AI CRM</span>
       </Link>
       
