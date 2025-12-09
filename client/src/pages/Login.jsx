@@ -153,9 +153,13 @@ const Login = () => {
     <div
       className={`min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-8 ${
         darkMode
-          ? "bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900"
+          ? ""
           : "bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50"
       }`}
+      style={{
+        backgroundColor: darkMode ? '#242424' : undefined,
+        backgroundImage: darkMode ? 'none' : undefined
+      }}
     >
       {/* Add custom styles for animations */}
       <style>{`
@@ -285,16 +289,18 @@ const Login = () => {
 
         {/* Right Side - Login Form */}
         <div
-          className={`w-full max-w-md mx-auto ${
-            darkMode ? "bg-gradient-to-br from-slate-800 to-slate-900/80" : "bg-gradient-to-br from-slate-50 to-cyan-50/80"
-          } backdrop-blur-xl rounded-3xl shadow-2xl p-8 border ${
-            darkMode ? "border-teal-600/30" : "border-teal-200/50"
+          className={`w-full max-w-md mx-auto backdrop-blur-xl rounded-3xl shadow-2xl p-8 border ${
+            darkMode ? "border-teal-600/30" : "bg-gradient-to-br from-slate-50 to-cyan-50/80 border-teal-200/50"
           }`}
+          style={{
+            backgroundColor: darkMode ? '#242424' : undefined,
+            backgroundImage: darkMode ? 'none' : 'linear-gradient(135deg, rgba(226, 232, 240, 1) 0%, rgba(176, 245, 255, 0.5) 100%)'
+          }}
         >
           {/* Logo */}
-          <div className="flex justify-center mb-6 rounded-2xl p-4" style={{ backgroundColor: '#ffffffff' }}>
+          <div className="flex justify-center mb-6 rounded-2xl p-4" style={{ backgroundColor: darkMode ? '#242424' : '#ffffffff' }}>
             <div className="flex flex-col items-center">
-              <img src={assets.Main_logo} alt="Insighta Logo" className="h-16 w-auto transition-transform group-hover:scale-110" />
+              <img src={darkMode ? assets.Main_logo_darkmode : assets.Main_logo} alt="Insighta Logo" className="h-16 w-auto transition-transform group-hover:scale-110" />
             </div>
           </div>
 

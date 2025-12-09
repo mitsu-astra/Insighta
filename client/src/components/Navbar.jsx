@@ -17,13 +17,14 @@ const Navbar = ({ user }) => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`${darkMode ? "bg-gray-800 shadow-lg" : "bg-white shadow-md"}`}>
-      <div className={`max-w-7xl mx-auto px-6 py-3 flex items-center justify-between ${darkMode ? "text-white" : ""}`}>
+    <nav className={`${darkMode ? "shadow-lg" : "bg-white shadow-md"}`} style={{ backgroundColor: darkMode ? "#242424" : "white" }}>
+      <div className={`max-w-7xl mx-auto px-6 py-1 flex items-center justify-between ${darkMode ? "text-white" : ""}`}>
         <div
-          className="flex items-center cursor-pointer gap-1"
+          className="flex items-center cursor-pointer gap-1 p-2"
           onClick={() => navigate("/dashboard")}
+          style={{ backgroundColor: darkMode ? "#242424" : "white" }}
         >
-          <img src={assets.Main_logo} alt="Logo" className="h-16" />
+          <img src={darkMode ? assets.Main_logo_darkmode : assets.main_logo_lightmode} alt="Logo" className="h-16" />
         </div>
 
         <div className="flex items-center gap-4">
