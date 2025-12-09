@@ -290,11 +290,11 @@ const Login = () => {
         {/* Right Side - Login Form */}
         <div
           className={`w-full max-w-md mx-auto backdrop-blur-xl rounded-3xl shadow-2xl p-8 border ${
-            darkMode ? "border-teal-600/30" : "bg-gradient-to-br from-slate-50 to-cyan-50/80 border-teal-200/50"
+            darkMode ? "border-teal-600/30" : "border-teal-200/50"
           }`}
           style={{
-            backgroundColor: darkMode ? '#242424' : undefined,
-            backgroundImage: darkMode ? 'none' : 'linear-gradient(135deg, rgba(226, 232, 240, 1) 0%, rgba(176, 245, 255, 0.5) 100%)'
+            backgroundColor: darkMode ? '#242424' : '#ffffff',
+            backgroundImage: 'none'
           }}
         >
           {/* Logo */}
