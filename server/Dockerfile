@@ -2,16 +2,16 @@
 
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /app/server
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from server directory
+COPY server/package*.json ./
 
-# Install production dependencies
-RUN npm install --production
+# Install all dependencies
+RUN npm install
 
-# Copy source code
-COPY . .
+# Copy server source code
+COPY server/ .
 
 # Create necessary directories
 RUN mkdir -p logs

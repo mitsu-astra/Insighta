@@ -2,16 +2,16 @@
 
 FROM node:18-alpine as build
 
-WORKDIR /app
+WORKDIR /app/client
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from client directory
+COPY client/package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy source code
-COPY . .
+# Copy client source code
+COPY client/ .
 
 # Build the application
 RUN npm run build

@@ -2,16 +2,16 @@
 
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /app/feedback-pipeline
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from feedback-pipeline directory
+COPY feedback-pipeline/package*.json ./
 
-# Install production dependencies
-RUN npm install --production
+# Install all dependencies
+RUN npm install
 
 # Copy source code
-COPY . .
+COPY feedback-pipeline/ .
 
 # Create non-root user
 USER node
