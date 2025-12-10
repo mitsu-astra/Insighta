@@ -10,8 +10,8 @@ COPY package*.json ./
 COPY server/package*.json ./server/
 
 # Install root dependencies and server dependencies
-RUN npm install && \
-    cd server && npm install && \
+RUN npm install --omit=dev && \
+    cd server && npm install --omit=dev && \
     cd ..
 
 # Copy all source code
@@ -31,5 +31,5 @@ EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD node -e "require('http').get('http://localhost:4000/api/public/stats', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})" || exit 1
 
-# Start server using root package.json script
-CMD ["npm", "start"]
+# Start server directly
+CMD ["node", "server/server.js"]

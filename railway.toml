@@ -2,7 +2,7 @@
 name = "server"
 builder = "dockerfile"
 dockerfilePath = "./server/Dockerfile"
-startCommand = "npm start"
+startCommand = "node server/server.js"
 port = 4000
 
 [[services]]
@@ -16,12 +16,12 @@ port = 80
 name = "worker"
 builder = "dockerfile"
 dockerfilePath = "./feedback-pipeline/Dockerfile"
-startCommand = "npm run start:worker"
+startCommand = "node feedback-pipeline/worker.js"
 port = 3006
 
 [[services]]
 name = "api"
 builder = "dockerfile"
 dockerfilePath = "./feedback-pipeline/Dockerfile"
-startCommand = "npm run start:api"
+startCommand = "node feedback-pipeline/api-server.js"
 port = 3005

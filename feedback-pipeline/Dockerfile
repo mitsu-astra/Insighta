@@ -9,8 +9,8 @@ COPY package*.json ./
 COPY feedback-pipeline/package*.json ./feedback-pipeline/
 
 # Install dependencies  
-RUN npm install && \
-    cd feedback-pipeline && npm install && \
+RUN npm install --omit=dev && \
+    cd feedback-pipeline && npm install --omit=dev && \
     cd ..
 
 # Copy source code
@@ -23,5 +23,6 @@ USER node
 # Expose metrics ports
 EXPOSE 3005 3006
 
-# Start worker or API (depends on railway.toml startCommand)
-CMD ["npm", "run", "start:worker"]
+# Start worker or API (determined by startCommand in railway.toml)
+# Default to worker if not overridden
+CMD ["node", "feedback-pipeline/worker.js"]
