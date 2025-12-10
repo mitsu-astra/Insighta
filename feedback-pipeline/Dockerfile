@@ -1,4 +1,5 @@
 # Production-ready Worker/API Dockerfile for Railway
+# v2 - Force rebuild
 
 FROM node:20-alpine
 

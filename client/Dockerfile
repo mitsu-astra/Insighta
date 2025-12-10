@@ -1,4 +1,5 @@
 # Production-ready Client Dockerfile for Railway
+# v2 - Force rebuild
 
 FROM node:18-alpine as build
 

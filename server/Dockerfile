@@ -1,4 +1,5 @@
 # Production-ready Server Dockerfile for Railway
+# v2 - Force rebuild
 
 FROM node:20-alpine
 
