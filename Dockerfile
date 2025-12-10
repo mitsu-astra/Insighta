@@ -11,7 +11,7 @@ RUN cd client && npm ci
 COPY client/ ./client/
 
 # Build with API URL - use Railway URL in production
-ARG VITE_API_URL=https://bubbly-youthfulness-production-4a8d.up.railway.app/api
+ARG VITE_API_URL=https://insighta.up.railway.app/api
 ENV VITE_API_URL=$VITE_API_URL
 
 RUN cd client && npm run build
