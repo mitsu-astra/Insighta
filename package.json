@@ -1,0 +1,30 @@
+{
+  "name": "insighta",
+  "version": "1.0.0",
+  "description": "AI CRM Feedback - Complete Stack",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js",
+    "start:all": "node start-all.js",
+    "client:build": "cd client && npm install && npm run build",
+    "server:install": "cd server && npm install",
+    "worker:install": "cd feedback-pipeline && npm install",
+    "install:all": "npm install && npm run client:build && npm run server:install && npm run worker:install",
+    "dev": "node start-all.js",
+    "seed:admin": "cd server && npm run seed:admin"
+  },
+  "keywords": [
+    "crm",
+    "sentiment-analysis",
+    "ai",
+    "feedback"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

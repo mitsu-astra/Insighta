@@ -1,0 +1,31 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile"
+
+[[services]]
+name = "server"
+builder = "dockerfile"
+dockerfilePath = "./server/Dockerfile"
+startCommand = "npm start"
+port = 4000
+
+[[services]]
+name = "client"
+builder = "dockerfile"
+dockerfilePath = "./client/Dockerfile"
+startCommand = "nginx -g 'daemon off;'"
+port = 80
+
+[[services]]
+name = "worker"
+builder = "dockerfile"
+dockerfilePath = "./feedback-pipeline/Dockerfile"
+startCommand = "npm run start:worker"
+port = 3006
+
+[[services]]
+name = "api"
+builder = "dockerfile"
+dockerfilePath = "./feedback-pipeline/Dockerfile"
+startCommand = "npm run start:api"
+port = 3005

@@ -1,0 +1,78 @@
+{
+  "name": "insighta",
+  "description": "AI CRM Feedback - Complete Stack Deployment",
+  "builder": "dockerfile",
+  "dockerfilePath": "./Dockerfile",
+  "port": 4000,
+  "env": [
+    {
+      "name": "NODE_ENV",
+      "default": "production"
+    },
+    {
+      "name": "PORT",
+      "default": "4000"
+    }
+  ],
+  "services": [
+    {
+      "name": "server",
+      "builder": "dockerfile",
+      "dockerfilePath": "./server/Dockerfile",
+      "startCommand": "npm start",
+      "port": 4000,
+      "restartPolicy": "always",
+      "environmentVariables": {
+        "PORT": "4000",
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "client",
+      "builder": "dockerfile",
+      "dockerfilePath": "./client/Dockerfile",
+      "startCommand": "nginx -g 'daemon off;'",
+      "port": 80,
+      "restartPolicy": "always"
+    },
+    {
+      "name": "feedback-api",
+      "builder": "dockerfile",
+      "dockerfilePath": "./feedback-pipeline/Dockerfile",
+      "startCommand": "npm run start:api",
+      "port": 3005,
+      "restartPolicy": "always",
+      "environmentVariables": {
+        "API_PORT": "3005"
+      }
+    },
+    {
+      "name": "feedback-worker",
+      "builder": "dockerfile",
+      "dockerfilePath": "./feedback-pipeline/Dockerfile",
+      "startCommand": "npm run start:worker",
+      "port": 3006,
+      "restartPolicy": "always",
+      "environmentVariables": {
+        "WORKER_METRICS_PORT": "3006"
+      }
+    }
+  ],
+  "plugins": [],
+  "healthChecks": [
+    {
+      "service": "server",
+      "path": "/api/public/stats",
+      "port": 4000,
+      "interval": 30,
+      "timeout": 10
+    },
+    {
+      "service": "client",
+      "path": "/",
+      "port": 80,
+      "interval": 30,
+      "timeout": 10
+    }
+  ]
+}

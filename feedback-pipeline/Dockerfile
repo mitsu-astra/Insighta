@@ -1,18 +1,23 @@
+# Production-ready Worker Dockerfile for Railway
+
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy only dependency files first (for layer caching)
+# Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
+# Install production dependencies
 RUN npm install --production
 
 # Copy source code
 COPY . .
 
-# Prevent root execution (security)
+# Create non-root user
 USER node
 
-# Start worker
+# Expose metrics port
+EXPOSE 3005 3006
+
+# Default to worker, can be overridden with start:api
 CMD ["npm", "run", "start:worker"]
