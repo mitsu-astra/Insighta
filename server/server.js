@@ -23,9 +23,9 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Serve static files from frontend/build if it exists (production)
-// In development, frontend runs separately on port 3000
-const buildPath = path.join(__dirname, "frontend/build");
+// Serve static files from frontend build (production)
+// Check both possible locations
+const buildPath = path.join(__dirname, "../public/dist") || path.join(__dirname, "frontend/build");
 if (fs.existsSync(buildPath)) {
   app.use(express.static(buildPath));
 }
