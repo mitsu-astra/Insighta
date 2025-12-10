@@ -1,18 +1,15 @@
 # Production-ready Worker/API Dockerfile for Railway
-# v2 - Force rebuild
+# v3 - Fixed dependencies installation
 
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy all package files
-COPY package*.json ./
+# Copy feedback-pipeline package files ONLY
 COPY feedback-pipeline/package*.json ./feedback-pipeline/
 
 # Install dependencies  
-RUN npm install --omit=dev && \
-    cd feedback-pipeline && npm install --omit=dev && \
-    cd ..
+RUN cd feedback-pipeline && npm install --omit=dev
 
 # Copy source code
 COPY feedback-pipeline/ ./feedback-pipeline/

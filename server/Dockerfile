@@ -1,19 +1,16 @@
 # Production-ready Server Dockerfile for Railway
-# v2 - Force rebuild
+# v3 - Fixed dependencies installation
 
 FROM node:20-alpine
 
 # Set working directory to project root
 WORKDIR /app
 
-# Copy all package files from root and server
-COPY package*.json ./
+# Copy server package files ONLY
 COPY server/package*.json ./server/
 
-# Install root dependencies and server dependencies
-RUN npm install --omit=dev && \
-    cd server && npm install --omit=dev && \
-    cd ..
+# Install server dependencies only
+RUN cd server && npm install --omit=dev
 
 # Copy all source code
 COPY server/ ./server/

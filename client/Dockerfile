@@ -1,18 +1,15 @@
 # Production-ready Client Dockerfile for Railway
-# v2 - Force rebuild
+# v3 - Fixed dependencies installation
 
 FROM node:18-alpine as build
 
 WORKDIR /app
 
-# Copy all package files
-COPY package*.json ./
+# Copy client package files ONLY
 COPY client/package*.json ./client/
 
 # Install dependencies
-RUN npm install && \
-    cd client && npm install && \
-    cd ..
+RUN cd client && npm install
 
 # Copy client source code
 COPY client/ ./client/
