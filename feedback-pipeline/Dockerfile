@@ -1,4 +1,4 @@
-# Production-ready Worker Dockerfile for Railway
+# Production-ready Worker/API Dockerfile for Railway
 
 FROM node:20-alpine
 
@@ -8,27 +8,20 @@ WORKDIR /app
 COPY package*.json ./
 COPY feedback-pipeline/package*.json ./feedback-pipeline/
 
-# Install dependencies
-RUN cd feedback-pipeline && npm install
+# Install dependencies  
+RUN npm install && \
+    cd feedback-pipeline && npm install && \
+    cd ..
 
 # Copy source code
 COPY feedback-pipeline/ ./feedback-pipeline/
-COPY . .
 
 # Create non-root user
+RUN addgroup -g 1000 node && adduser -D -u 1000 -G node node
 USER node
 
-# Expose metrics port
+# Expose metrics ports
 EXPOSE 3005 3006
 
 # Start worker or API (depends on railway.toml startCommand)
-CMD ["npm", "run", "start:worker"]
-
-# Create non-root user
-USER node
-
-# Expose metrics port
-EXPOSE 3005 3006
-
-# Default to worker, can be overridden with start:api
 CMD ["npm", "run", "start:worker"]

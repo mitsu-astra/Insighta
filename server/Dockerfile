@@ -16,33 +16,20 @@ RUN npm install && \
 
 # Copy all source code
 COPY server/ ./server/
-COPY . .
 
 # Create necessary directories
 RUN mkdir -p logs
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 4000) + '/api/public/stats', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=4000
 
 # Expose port
-ENV NODE_ENV=production
-ENV PORT=${PORT:-4000}
-EXPOSE ${PORT}
+EXPOSE 4000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:4000/api/public/stats', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})" || exit 1
 
 # Start server using root package.json script
-CMD ["npm", "start"]
-
-# Create necessary directories
-RUN mkdir -p logs
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 4000) + '/api/public/stats', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
-
-# Expose port
-ENV PORT=${PORT:-4000}
-EXPOSE ${PORT}
-
-# Start server
 CMD ["npm", "start"]

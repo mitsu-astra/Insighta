@@ -9,7 +9,9 @@ COPY package*.json ./
 COPY client/package*.json ./client/
 
 # Install dependencies
-RUN cd client && npm install
+RUN npm install && \
+    cd client && npm install && \
+    cd ..
 
 # Copy client source code
 COPY client/ ./client/
@@ -21,10 +23,10 @@ RUN cd client && npm run build
 FROM nginx:alpine
 
 # Copy built app from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/client/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY client/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
