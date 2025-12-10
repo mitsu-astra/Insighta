@@ -123,15 +123,29 @@ app.get("/api/public/stats", async (req, res) => {
   }
 });
 
+// Serve static files from built client
+const publicPath = path.join(__dirname, "../public");
+if (fs.existsSync(publicPath)) {
+  app.use(express.static(publicPath));
+}
+
 // API endpoints
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/admin", adminRouter);
 
-// Serve frontend
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
+// Serve SPA fallback - must be after API routes
+app.get("*", (req, res) => {
+  const indexPath = path.join(__dirname, "../public/dist", "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).json({ 
+      success: false, 
+      message: "Frontend not available. Build the client first." 
+    });
+  }
 });
 
 app.listen(port, () => {
@@ -144,3 +158,4 @@ app.listen(port, () => {
     `Prometheus metrics available at http://localhost:${port}/metrics`
   );
 });
+

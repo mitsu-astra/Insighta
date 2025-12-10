@@ -1,0 +1,52 @@
+# Railway Configuration for Insighta Multi-Service Deployment
+# To deploy multiple services, use:
+# railway service add
+# railway service create --dockerfile Dockerfile.api
+# railway service create --dockerfile Dockerfile.worker
+
+# Main Service (Server + Client)
+[services.main]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile"
+restartPolicy = "always"
+port = 4000
+
+[[services.main.volumes]]
+source = "logs"
+destination = "/app/logs"
+
+[services.main.environment]
+NODE_ENV = "production"
+PORT = "4000"
+
+# API Service (Optional - if using separate service)
+[services.api]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile.api"
+restartPolicy = "always"
+port = 3005
+
+[services.api.environment]
+NODE_ENV = "production"
+API_PORT = "3005"
+
+# Worker Service (Optional - if using separate service)
+[services.worker]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile.worker"
+restartPolicy = "always"
+port = 3006
+
+[services.worker.environment]
+NODE_ENV = "production"
+WORKER_METRICS_PORT = "3006"
+
+# Build settings
+[build]
+buildCommand = "npm install && cd client && npm install && npm run build && cd ../server && npm install"
+
+# Deployment settings
+[deploy]
+startCommand = "npm start"
+healthCheckPath = "/api/public/stats"
+healthCheckInterval = 30
