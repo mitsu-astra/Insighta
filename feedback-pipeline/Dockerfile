@@ -2,16 +2,27 @@
 
 FROM node:20-alpine
 
-WORKDIR /app/feedback-pipeline
+WORKDIR /app
 
-# Copy package files from feedback-pipeline directory
-COPY feedback-pipeline/package*.json ./
+# Copy all package files
+COPY package*.json ./
+COPY feedback-pipeline/package*.json ./feedback-pipeline/
 
-# Install all dependencies
-RUN npm install
+# Install dependencies
+RUN cd feedback-pipeline && npm install
 
 # Copy source code
-COPY feedback-pipeline/ .
+COPY feedback-pipeline/ ./feedback-pipeline/
+COPY . .
+
+# Create non-root user
+USER node
+
+# Expose metrics port
+EXPOSE 3005 3006
+
+# Start worker or API (depends on railway.toml startCommand)
+CMD ["npm", "run", "start:worker"]
 
 # Create non-root user
 USER node

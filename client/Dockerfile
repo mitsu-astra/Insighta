@@ -2,19 +2,20 @@
 
 FROM node:18-alpine as build
 
-WORKDIR /app/client
+WORKDIR /app
 
-# Copy package files from client directory
-COPY client/package*.json ./
+# Copy all package files
+COPY package*.json ./
+COPY client/package*.json ./client/
 
 # Install dependencies
-RUN npm install
+RUN cd client && npm install
 
 # Copy client source code
-COPY client/ .
+COPY client/ ./client/
 
 # Build the application
-RUN npm run build
+RUN cd client && npm run build
 
 # Nginx stage
 FROM nginx:alpine
