@@ -136,13 +136,13 @@ app.use("/api/feedback", feedbackRouter);
 app.use("/api/admin", adminRouter);
 
 // Serve SPA fallback - must be after API routes
-app.get("*", (req, res) => {
+app.get(/^(?!\/api).*/, (req, res) => {
   const indexPath = path.join(__dirname, "../public/dist", "index.html");
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
     res.status(404).json({ 
-      success: false, 
+      success: false,
       message: "Frontend not available. Build the client first." 
     });
   }
